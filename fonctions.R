@@ -239,11 +239,11 @@ if (nrow(voies) != 0) out_gg <- out_gg +  geom_sf(data = voies, color = alpha("#
     geom_sf(data = ilot, col= "red", size = 4, alpha = 0)+
     geom_label(data = ril,
                aes(x = x_gps, y = y_gps, label = adr_rang), color = "red", fill= alpha("white", 0.6), 
-               size = 3, label.size = NA, label.padding = unit(0.01, "npc"), 
+               size = 1.5, label.size = NA, label.padding = unit(0.005, "npc"), 
                nudge_x = 0.00004,
                nudge_y = 0.00004,
                fontface ="bold",
-               label.r = unit(0.3, "lines")
+               label.r = unit(0.2, "lines")
                )+
     coord_sf( # réduire la zone grise autour de la photo
       xlim = c(bbox["xmin"] + offset, bbox["xmax"] - offset),
@@ -306,12 +306,17 @@ representer_sous_ril <- function(sous_ril,contour_ilot){
 
   contour_ilot <- st_crop(contour_ilot,bbox_polygon)
 
-  raster_data <- obtain_raster_from_url(url_ortho,bbox)
-
+  raster_data <- obtain_raster_from_url(url_ortho,bbox_large)
+  if (length(unique(sous_ril$groupe[1]))!=1){
+    titre <- paste0("Plan Ortho ",contour_ilot$ident_ilot[1])
+  }else{
+    titre <- paste0("Plan Ortho ",contour_ilot$ident_ilot[1]," groupe : ",sous_ril$groupe[1])
+  }
+  
   p <- dessiner_plan(raster_data, voies, bbox_large,
                 sous_ril, contour_ilot,
                 couleur_nom_voie = "white",
-                titre = paste0("Plan Ortho ",contour_ilot$ident_ilot[1]," groupe : ",sous_ril$groupe[1]),
+                titre = titre,
                 vjust_voie = -0.00005, offset = 0.00000)
   p
 
