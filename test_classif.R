@@ -31,5 +31,9 @@ ril_lam <- ril_lam  %>%
 # donner la possibilité de ne pas électionner tel ou tel zoom ?
 # code_ilot = "0902"; code_ilot = "0941"; "0770";"0751";
 
-liste_ilot <- paste0("97213",c("0902","0941","0770","0751"))
+liste_ilot <- 
+  paste0("97213",c(c("0902","0941","0770","0751"),unique(ril_lam$ilot)))
+
 lapply(liste_ilot,gerer_ilot, ril_ville = ril_lam,ilots = ilots)
+
+

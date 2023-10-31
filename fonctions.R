@@ -305,7 +305,7 @@ representer_sous_ril <- function(sous_ril,contour_ilot){
   contour_ilot <- st_crop(contour_ilot,bbox_polygon)
 
   raster_data <- obtain_raster_from_url(url_ortho,bbox_large)
-  if (length(unique(sous_ril$groupe[1]))!=1){
+  if (length(unique(sous_ril$groupe))!=1){
     titre <- paste0("Plan Ortho ",contour_ilot$ident_ilot[1])
   }else{
     titre <- paste0("Plan Ortho ",contour_ilot$ident_ilot[1]," groupe : ",sous_ril$groupe[1])
@@ -322,7 +322,7 @@ representer_sous_ril <- function(sous_ril,contour_ilot){
 
 
 gerer_ilot <- function(code_ident_ilot,ilots,ril_ville){
-  # code_ident_ilot = "972130751"
+  # code_ident_ilot = "972130751"; ril_ville    = ril_lam; ilots = ilots
   contour_ilot <- ilots %>% filter(ident_ilot==code_ident_ilot)
   # On pourrait afficher le résultat de la classif avec des numéros
   # Puis mettre le numéro du groupe dans le titre  
@@ -341,7 +341,7 @@ gerer_ilot <- function(code_ident_ilot,ilots,ril_ville){
   p_globale <- representer_sous_ril(sous_ril = ril_ilot_avec_grp, contour_ilot = contour_ilot)
   # puis ploter les différents groupes
   liste_sous_ril <- split(ril_ilot_avec_grp,ril_ilot_avec_grp$groupe)
-
+# sous_ril <- liste_sous_ril[[1]];  contour_ilot <- contour_ilot 
   liste_plot <- lapply(liste_sous_ril, function(x) representer_sous_ril(sous_ril = x, contour_ilot = contour_ilot))
 
   liste_plot <- c(list(p_globale,graph),liste_plot)
