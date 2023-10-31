@@ -235,7 +235,7 @@ if (nrow(voies) != 0) out_gg <- out_gg +  geom_sf(data = voies, color = alpha("#
                 aes(label = name), text_smoothing = 65, linecolour = "#ad88b3", 
                 color = couleur_nom_voie, vjust = vjust_voie, fill = "#E6F0B3", 
                 alpha = 0.5, fontface = 6, size = 4) +
-    geom_sf(data = ril, col = "black", size = 3) +
+    geom_sf(data = ril, col = "black", size = 2) +
     geom_sf(data = ilot, col= "red", size = 4, alpha = 0)+
     geom_label(data = ril,
                aes(x = x_gps, y = y_gps, label = adr_rang), color = "red", fill= alpha("white", 0.6), 
@@ -270,8 +270,6 @@ if (nrow(voies) != 0) out_gg <- out_gg +  geom_sf(data = voies, color = alpha("#
     panel.background = element_blank(),
     )
 }
-
-
 
 
 # je mets le résultat dans un pdf avec les 2 à côté
@@ -319,5 +317,40 @@ representer_sous_ril <- function(sous_ril,contour_ilot){
                 titre = titre,
                 vjust_voie = -0.00005, offset = 0.00000)
   p
+
+}
+
+
+gerer_ilot <- function(code_ident_ilot,ilots,ril_ville){
+  # code_ident_ilot = "972130751"
+  contour_ilot <- ilots %>% filter(ident_ilot==code_ident_ilot)
+  # On pourrait afficher le résultat de la classif avec des numéros
+  # Puis mettre le numéro du groupe dans le titre  
+  ril_ilot <- ril_ville %>% 
+    filter(ilot == substr(code_ident_ilot,6,9)) %>% 
+    select(id_rp, ilot, depcom, x, y,adr_rang) 
+  
+  #plot(ril_ilot$geometry,col= "red")
+  
+  res_classif <- classif_kmeans_seq(ril_ilot)
+
+  ril_ilot_avec_grp <- res_classif$ril
+  graph <- res_classif$plot_final
+
+  #ploter le ril_ilot_complet :
+  p_globale <- representer_sous_ril(sous_ril = ril_ilot_avec_grp, contour_ilot = contour_ilot)
+  # puis ploter les différents groupes
+  liste_sous_ril <- split(ril_ilot_avec_grp,ril_ilot_avec_grp$groupe)
+
+  liste_plot <- lapply(liste_sous_ril, function(x) representer_sous_ril(sous_ril = x, contour_ilot = contour_ilot))
+
+  liste_plot <- c(list(p_globale,graph),liste_plot)
+  # tout mettre dans le même pdf fusionner les PDF
+  # save the plot in a same pdf file
+  pdf(file = paste0("zoom_",code_ident_ilot,".pdf"), width = 10, height = 10)
+  for (i in 1:length(liste_plot)){
+    print(liste_plot[[i]])
+  }
+  dev.off()
 
 }
