@@ -52,6 +52,10 @@ e-s
 #TODO
 # gérer titres pour graphs principaux
 # gérer les couleurs, ie mettre les numéros de couleur des logements hors groupe en bleu à minima
+# relancer éventuellement avec des seuils de distance + faible ou plus fort dans certains cas
+# pour que le decoupage se fasse quand même ou non
+# branchement éventuel d'autres images Dynamis -> test d'obtention
+# expliqquer tout ça à Loulou pour qu'il prenne le bb
 
 
 
