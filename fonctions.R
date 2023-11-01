@@ -158,20 +158,6 @@ get_url_ortho <- function(bbox, width = 1100 , height = 1300, CRS = "4326") {
   url
 }
 
-
-
-
-
-obtain_raster_from_url <- function(url, bbox) {
-  # url <- url_ortho
-  download.file(url = url, destfile = "ilot.tif", mode = "wb")
-  raster_data <- stack("ilot.tif") # equivalent de raster mais pour multibandes !!
-  bb <- bbox[c("xmin", "xmax", "ymin", "ymax")]
-  extent(raster_data) <- bb
-  raster_data <- terra::rast(raster_data)
-  raster_data
-}
-
 generer_polygone_from_bbox <- function(bbox){
   
   xmin <- bbox["xmin"]    
