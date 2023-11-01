@@ -42,7 +42,7 @@ s<-Sys.time()
 liste_ilot <- 
   paste0(depcom,unique(ril_ville$ilot))
 lapply(liste_ilot,function(ilot){
-  writeLines(ilot, "myfile.txt")
+  writeLines(ilot, "log.txt",append =TRUE)
   gerer_ilot(ilot, ril_ville = ril_ville,ilots = ilots)
 })
 e <-Sys.time()
@@ -50,6 +50,7 @@ e <-Sys.time()
 e-s
 
 #TODO
+# debug les cas bizarre
 # gérer titres pour graphs principaux
 # gérer les couleurs, ie mettre les numéros de couleur des logements hors groupe en bleu à minima
 # relancer éventuellement avec des seuils de distance + faible ou plus fort dans certains cas
