@@ -41,28 +41,18 @@ depcom <- substr(ril_ville$id_rp,1,5)%>% unique()
 s<-Sys.time()
 liste_ilot <- 
   paste0(depcom,unique(ril_ville$ilot))
-lapply(liste_ilot,gerer_ilot, ril_ville = ril_ville,ilots = ilots)
+lapply(liste_ilot,function(ilot){
+  writeLines(ilot, "myfile.txt")
+  gerer_ilot(ilot, ril_ville = ril_ville,ilots = ilots)
+})
 e <-Sys.time()
 
 e-s
 
+#TODO
+# gérer titres pour graphs principaux
+# gérer les couleurs, ie mettre les numéros de couleur des logements hors groupe en bleu à minima
 
 
 
-# filtre gr 1 :
-ril_tri <- ril_tri  %>% 
-  filter(grp_rotation == 1) %>% 
-  select(id_rp, ilot, depcom, x, y) %>% 
-  mutate(adr_rang = sapply(strsplit(id_rp," "),"[[",5))%>%
-  st_as_sf(coords = c("x","y"), crs=5490, remove = FALSE)
-
-s<-Sys.time()
-liste_ilot <- 
-  paste0("97230",unique(ril_tri$ilot))
-
-lapply(liste_ilot,gerer_ilot, ril_ville = ril_tri,ilots = ilots)
-lapply(liste_ilot[sample(length(liste_ilot))],gerer_ilot, ril_ville = ril_tri,ilots = ilots)
-e <-Sys.time()
-
-pirnt(s,e)
 
